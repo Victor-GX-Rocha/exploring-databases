@@ -1,6 +1,6 @@
 """ ORM, ENUM and DTO models for table "Resumo Diário do Serviço Antivetorial (RDSA)" """
 
-from .dto_models import (
+from .rdsa_dto import (
     DTOHead,
     DTOVisit,
     DTONumDeposits,
@@ -10,7 +10,7 @@ from .dto_models import (
     DTOTreatment,
     DTORDSA
 )
-from .enum_models import (
+from .rdsa_enum import (
     ZoneType,
     ZoneConcluded,
     ActvityType,
@@ -22,7 +22,9 @@ from .enum_models import (
     PerifocalType
 )
 
-from .orm_models import RDSA
+from .rdsa_orm import RDSA
+
+__version__ = '0.0.1'
 
 __all__ = [
     'ZoneType',

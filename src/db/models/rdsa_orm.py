@@ -1,12 +1,12 @@
 """ ORM model for table "Resumo Diário do Serviço Antivetorial (RDSA)" """
 
-from sqlalchemy import Integer, String, Date
+from sqlalchemy import Integer, String, Date, Enum
 from sqlalchemy.orm import Mapped, mapped_column, composite
 from datetime import datetime
-from enum import Enum
+import enum
 
 from src.db.connection import Base
-from .enum_models import (
+from .rdsa_enum import (
     ZoneType,
     ZoneConcluded,
     ActvityType,
@@ -17,7 +17,7 @@ from .enum_models import (
     FocalTypeL1,
     PerifocalType
 )
-from .dto_models import (
+from .rdsa_dto import (
     DTOHead,
     DTOVisit,
     DTONumDeposits,
@@ -37,16 +37,18 @@ class RDSA(Base):
     
     __tablename__ = 'RDSA'
     
+    id: Mapped[int] = mapped_column(primary_key=True)
+    
     municipality: Mapped[str] = mapped_column(String(64), nullable=False)
     locality_code: Mapped[int] = mapped_column(Integer, nullable=False)
     locality_name: Mapped[str] = mapped_column(String(128), nullable=False)
-    locality_category: Mapped[Enum] = mapped_column(LocalityCategory)
+    locality_category: Mapped[enum.Enum] = mapped_column(Enum(LocalityCategory))
     zone_number_and_name: Mapped[str] = mapped_column(String(128))
-    zone_type: Mapped[Enum] = mapped_column(ZoneType)
-    zone_concluded: Mapped[Enum] = mapped_column(ZoneConcluded)
+    zone_type: Mapped[enum.Enum] = mapped_column(Enum(ZoneType))
+    zone_concluded: Mapped[enum.Enum] = mapped_column(Enum(ZoneConcluded))
     activity_date: Mapped[datetime] = mapped_column(Date)
     cicle_year: Mapped[str] = mapped_column(String(8))
-    activity_type: Mapped[Enum] = mapped_column(ActvityType)
+    activity_type: Mapped[enum.Enum] = mapped_column(Enum(ActvityType))
     
     head = composite(
         DTOHead,
@@ -59,7 +61,7 @@ class RDSA(Base):
         'zone_concluded',
         'activity_date',
         'cicle_year',
-        'activity'
+        'activity_type'
     )
     
     # 2.1. Localidade da residência.
@@ -70,10 +72,10 @@ class RDSA(Base):
     number: Mapped[int] = mapped_column(Integer)
     sequence_2: Mapped[int] = mapped_column(Integer)
     complement: Mapped[int] = mapped_column(Integer)
-    property_type: Mapped[Enum] = mapped_column(PropertyType)
-    visite_time: Mapped[datetime] = mapped_column(datetime)
-    visite_type: Mapped[Enum] = mapped_column(VisiteType)
-    pendence: Mapped[Enum] = mapped_column(Pendence)
+    property_type: Mapped[enum.Enum] = mapped_column(Enum(PropertyType))
+    visite_time: Mapped[datetime] = mapped_column(Date)
+    visite_type: Mapped[enum.Enum] = mapped_column(Enum(VisiteType))
+    pendence: Mapped[enum.Enum] = mapped_column(Enum(Pendence))
     
     visit = composite(
         DTOVisit,
@@ -119,8 +121,8 @@ class RDSA(Base):
     
     sample_collection = composite(
         DTOSampleCollection,
-        'num_initial_sample'
-        'num_final_sample'
+        'num_initial_sample',
+        'num_final_sample',
         'quantity_tubes'
     )
     
@@ -129,23 +131,23 @@ class RDSA(Base):
     eliminated_deposits: Mapped[int] = mapped_column(Integer)
     treated_property: Mapped[int] = mapped_column(Integer)
     # 2.4.1 Focal larvicida
-    focal_type_l1: Mapped[Enum] = mapped_column(FocalTypeL1)
+    focal_type_l1: Mapped[enum.Enum] = mapped_column(Enum(FocalTypeL1))
     focal_quantity_load: Mapped[int] = mapped_column(Integer)
     focal_treated_deposits_quantity: Mapped[int] = mapped_column(Integer)
     # 2.4.2 Perifocal adulticida
-    perifocal_type: Mapped[Enum] = mapped_column(PerifocalType)
+    perifocal_type: Mapped[enum.Enum] = mapped_column(Enum(PerifocalType))
     perifocal_quantity_load: Mapped[int] = mapped_column(Integer)
     
-    treatment = composite(
-        DTOTreatment,
-        'eliminated_deposits',
-        'treated_property',
-        'focal_type_l1',
-        'focal_quantity_load',
-        'focal_treated_deposits_quantity',
-        'perifocal_type',
-        'perifocal_quantity_load'
-    )
+    # treatment = composite(
+    #     DTOTreatment,
+    #     'eliminated_deposits',
+    #     'treated_property',
+    #     'focal_type_l1',
+    #     'focal_quantity_load',
+    #     'focal_treated_deposits_quantity',
+    #     'perifocal_type',
+    #     'perifocal_quantity_load'
+    # )
     
     def to_dto(self) -> DTORDSA:
         """ Converts the ORM information toa a model. """

@@ -5,7 +5,7 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase, Session
 from contextlib import contextmanager
 from typing import Generator, Any
 
-engine = create_engine('sqlite:///ficha_pncd.db')
+engine = create_engine('sqlite:///ficha_rdsa.db', echo=True)
 SessionLocal = sessionmaker(bind=engine)
 
 class Base(DeclarativeBase):...
@@ -35,7 +35,6 @@ def create_tables() -> None:
     """ Creates all defined tables if it not exists. """
     Base.metadata.create_all(engine)
 
-create_tables()
 
 __all__ = [
     'Base',

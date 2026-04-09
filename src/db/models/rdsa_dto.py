@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
-from .enum_models import (
+from .rdsa_enum import (
     ZoneType,
     ZoneConcluded,
     ActvityType,
@@ -41,7 +41,7 @@ class DTOHead:
     zone_concluded: ZoneConcluded
     activity_date: datetime
     cicle_year: str
-    activity: ActvityType
+    activity_type: ActvityType
 
 @dataclass
 class DTOVisit:

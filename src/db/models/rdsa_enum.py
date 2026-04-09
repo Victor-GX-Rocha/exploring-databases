@@ -1,8 +1,8 @@
-""" Enums and fixed data """
+""" enum.Enums and fixed data """
 
-from enum import Enum
+import enum
 
-class ZoneType(Enum):
+class ZoneType(enum.Enum):
     """
     Args:
         SEDE (int): 
@@ -11,7 +11,7 @@ class ZoneType(Enum):
     SEDE: int = 1
     OUTROS: int = 2
 
-class ZoneConcluded(Enum):
+class ZoneConcluded(enum.Enum):
     """
     Args:
         SIM (str):
@@ -20,7 +20,7 @@ class ZoneConcluded(Enum):
     SIM: str = 'S'
     NAO: str = 'N'
 
-class ActvityType(Enum):
+class ActvityType(enum.Enum):
     """
     LI (int): Levantamento Indice.
     LI_T (int): Levantamento Indice e Tratamento.
@@ -36,10 +36,12 @@ class ActvityType(Enum):
     DF: int = 5
     PVE: int = 6
 
-class PropertyType(Enum):
-    """  """
+class PropertyType(enum.Enum):
+    """ Não sei o que por aqui no momento """
+    dado_provisorio = None
+    dado_provisorio_2 = None
 
-class VisiteType(Enum):
+class VisiteType(enum.Enum):
     """
     
     Args:
@@ -49,7 +51,7 @@ class VisiteType(Enum):
     NORMAL: str = 'N'
     RECUP: str = 'R'
 
-class Pendence(Enum):
+class Pendence(enum.Enum):
     """
     Reason why visit didn't happened.
     
@@ -62,15 +64,21 @@ class Pendence(Enum):
 
 
 
-class LocalityCategory(Enum):
-    """  """
+class LocalityCategory(enum.Enum):
+    """ Não sei o que por aqui no momento """
+    dado_provisorio = None
+    dado_provisorio_2 = None
 
 
-class FocalTypeL1(Enum):
-    """  """
+class FocalTypeL1(enum.Enum):
+    """ Não sei o que por aqui no momento """
+    dado_provisorio = None
+    dado_provisorio_2 = None
 
-class PerifocalType(Enum):
-    """  """
+class PerifocalType(enum.Enum):
+    """ Não sei o que por aqui no momento """
+    dado_provisorio = None
+    dado_provisorio_2 = None
 
 
 __all__ = [
