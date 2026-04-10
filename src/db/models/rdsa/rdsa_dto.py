@@ -18,33 +18,7 @@ from .rdsa_enum import (
 
 
 @dataclass
-class DTOHead:
-    """
-    Args:
-        municipality (str):
-        locality_code (int):
-        locality_name (str):
-        locality_category (LocalityCategory):
-        zone_number_and_name (str):
-        zone_type (ZoneType):
-        zone_concluded (ZoneConcluded):
-        activity_date (Date):
-        cicle_year (str):
-        activity (ActvityType):
-    """
-    municipality: str
-    locality_code: int
-    locality_name: str
-    locality_category: LocalityCategory
-    zone_number_and_name: str
-    zone_type: ZoneType
-    zone_concluded: ZoneConcluded
-    activity_date: datetime
-    cicle_year: str
-    activity_type: ActvityType
-
-@dataclass
-class DTOVisit:
+class Visit:
     """
     Informations about the locality and property during the visit.
     
@@ -74,7 +48,7 @@ class DTOVisit:
     pendence: Pendence
 
 @dataclass
-class DTONumDeposits:
+class NumDeposits:
     """
     
     Args:
@@ -97,7 +71,7 @@ class DTONumDeposits:
     inspecioned_property_quantity: int = 0
 
 @dataclass
-class DTOSampleCollection:
+class SampleCollection:
     """
     
     Args:
@@ -110,45 +84,70 @@ class DTOSampleCollection:
     quantity_tubes: Optional[int] = None
 
 @dataclass
-class DTOFocal:
+class Focal:
     """  """
     type_l1: FocalTypeL1
     quantity_load: int
     treated_deposits_quantity: int
 
 @dataclass
-class DTOPerifocal:
+class Perifocal:
     """  """
     type_: PerifocalType
     quantity_load: int
 
 @dataclass
-class DTOTreatment:
+class Treatment:
     eliminated_deposits: int
     treated_property: int
-    focal: DTOFocal
-    perifocal: DTOPerifocal
-    
+    focal: Focal
+    perifocal: Perifocal
+
 
 @dataclass
-class DTORDSA:
+class HeadRecord:
+    """
+    Args:
+        municipality (str):
+        locality_code (int):
+        locality_name (str):
+        locality_category (LocalityCategory):
+        zone_number_and_name (str):
+        zone_type (ZoneType):
+        zone_concluded (ZoneConcluded):
+        activity_date (Date):
+        cicle_year (str):
+        activity (ActvityType):
+    """
+    municipality: str
+    locality_code: int
+    locality_name: str
+    locality_category: LocalityCategory
+    zone_number_and_name: str
+    zone_type: ZoneType
+    zone_concluded: ZoneConcluded
+    activity_date: datetime
+    cicle_year: str
+    activity_type: ActvityType
+
+@dataclass
+class VisitRecord:
     """
     Por enquanto vou criar isso aqui dentro mesmo.
     """
-    head: DTOHead
-    visit: DTOVisit
-    num_deposits: DTONumDeposits
-    sample_collection: DTOSampleCollection
-    treatment: DTOTreatment
+    visit: Visit
+    num_deposits: NumDeposits
+    sample_collection: SampleCollection
+    treatment: Treatment
 
 
 __all__ = [
-    'DTOHead',
-    'DTOVisit',
-    'DTONumDeposits',
-    'DTOSampleCollection',
-    'DTOFocal',
-    'DTOPerifocal',
-    'DTOTreatment',
-    'DTORDSA'
+    'Head',
+    'Visit',
+    'NumDeposits',
+    'SampleCollection',
+    'Focal',
+    'Perifocal',
+    'Treatment',
+    'VisitRecord'
 ]

@@ -1,7 +1,7 @@
 """ ORM model for table "Resumo Diário do Serviço Antivetorial (RDSA)" """
 
-from sqlalchemy import Integer, String, Date, Enum
-from sqlalchemy.orm import Mapped, mapped_column, composite
+from sqlalchemy import Integer, String, Date, Enum, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, composite, relationship
 from datetime import datetime
 import enum
 
@@ -18,26 +18,26 @@ from .rdsa_enum import (
     PerifocalType
 )
 from .rdsa_dto import (
-    DTOHead,
-    DTOVisit,
-    DTONumDeposits,
-    DTOSampleCollection,
-    DTOFocal,
-    DTOPerifocal,
-    DTOTreatment,
-    DTORDSA
+    HeadRecord,
+    VisitRecord,
+    NumDeposits,
+    SampleCollection,
+    Focal,
+    Perifocal,
+    Treatment,
+    Visit
 )
 
-class RDSA(Base):
+class RdsaHead(Base):
     """
-    An ORM class to represents the "Resumo Diário do Serviço Antivetorial (RDSA)" as a table.
+    An ORM class to represents the "Resumo Diário do Serviço Antivetorial (RDSA)" heading as a table.
     
-    Keeps all the informations during a ACE visit.
+    Pretends to Keep all the informations about a work day.
     """
     
-    __tablename__ = 'RDSA'
+    __tablename__ = 'rdsa_head'
     
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     
     municipality: Mapped[str] = mapped_column(String(64), nullable=False)
     locality_code: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -51,7 +51,7 @@ class RDSA(Base):
     activity_type: Mapped[enum.Enum] = mapped_column(Enum(ActvityType))
     
     head = composite(
-        DTOHead,
+        HeadRecord,
         'municipality',
         'locality_code',
         'locality_name',
@@ -63,6 +63,22 @@ class RDSA(Base):
         'cicle_year',
         'activity_type'
     )
+    
+    rdsa_visit = relationship('RdsaVisit', back_populates='rdsa_head', lazy='selectin')
+
+
+class RdsaVisit(Base):
+    """
+    An ORM class to represents the "Resumo Diário do Serviço Antivetorial (RDSA)" heading as a table.
+    
+    Pretends to Keep all the informations during a ACE each visit.
+    """
+    
+    __tablename__ = 'rdsa_visit'
+    
+    rdsa_head = relationship('RdsaHead', back_populates='rdsa_visit')
+    
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     
     # 2.1. Localidade da residência.
     block_number: Mapped[int] = mapped_column(Integer)
@@ -78,7 +94,7 @@ class RDSA(Base):
     pendence: Mapped[enum.Enum] = mapped_column(Enum(Pendence))
     
     visit = composite(
-        DTOVisit,
+        Visit,
         'block_number',
         'sequence',
         'side',
@@ -89,7 +105,7 @@ class RDSA(Base):
         'property_type',
         'visite_time',
         'visite_type',
-        'pendence',
+        'pendence'
     )
     
     # 2.2. Número de depositos inspecionados.
@@ -103,7 +119,7 @@ class RDSA(Base):
     inspecioned_property_quantity: Mapped[int] = mapped_column(Integer)
     
     num_deposits = composite(
-        DTONumDeposits,
+        NumDeposits,
         'a1',
         'a2',
         'b',
@@ -120,7 +136,7 @@ class RDSA(Base):
     quantity_tubes: Mapped[int] = mapped_column(Integer)
     
     sample_collection = composite(
-        DTOSampleCollection,
+        SampleCollection,
         'num_initial_sample',
         'num_final_sample',
         'quantity_tubes'
@@ -138,41 +154,11 @@ class RDSA(Base):
     perifocal_type: Mapped[enum.Enum] = mapped_column(Enum(PerifocalType))
     perifocal_quantity_load: Mapped[int] = mapped_column(Integer)
     
-    # treatment = composite(
-    #     DTOTreatment,
-    #     'eliminated_deposits',
-    #     'treated_property',
-    #     'focal_type_l1',
-    #     'focal_quantity_load',
-    #     'focal_treated_deposits_quantity',
-    #     'perifocal_type',
-    #     'perifocal_quantity_load'
-    # )
-    
-    def to_dto(self) -> DTORDSA:
-        """ Converts the ORM information toa a model. """
-        
-        return DTORDSA(
-            head=DTOHead(self.head),
-            visit=DTOVisit(self.visit),
-            num_deposits=DTONumDeposits(self.num_deposits),
-            sample_collection=DTOSampleCollection(self.sample_collection),
-            treatment=DTOTreatment(
-                eliminated_deposits=self.eliminated_deposits,
-                treated_property=self.treated_property,
-                focal=DTOFocal(
-                    type_l1=self.focal_type_l1,
-                    quantity_load=self.focal_quantity_load,
-                    treated_deposits_quantity=self.focal_treated_deposits_quantity
-                ),
-                perifocal=DTOPerifocal(
-                    type_=self.perifocal_type,
-                    quantity_load=self.perifocal_quantity_load
-                ),
-            )
-        )
+    head_id: Mapped[int] = mapped_column(ForeignKey('rdsa_head.id'))
+
 
 
 __all__ = [
-    'RDSA'
+    'RdsaHead',
+    'RdsaVisit'
 ]

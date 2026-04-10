@@ -2,6 +2,7 @@
 
 import enum
 
+
 class ZoneType(enum.Enum):
     """
     Args:
@@ -68,7 +69,6 @@ class LocalityCategory(enum.Enum):
     """ Não sei o que por aqui no momento """
     dado_provisorio = None
     dado_provisorio_2 = None
-
 
 class FocalTypeL1(enum.Enum):
     """ Não sei o que por aqui no momento """
